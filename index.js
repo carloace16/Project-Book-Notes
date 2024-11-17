@@ -2,11 +2,10 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import axios from "axios";
-import path from "path";
 import dotenv from "dotenv";
-import methodOverride from "method-override";
+import methodOverride from "method-override"; // Imports method-override, a middleware for using HTTP verbs like PUT or DELETE in environments that only support POST.
 
-dotenv.config();
+dotenv.config(); // Reads a .env file and populates process.env with its contents.
 
 const app = express();
 const port = 3000;
@@ -22,7 +21,7 @@ const pool = new Pool({
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-app.set("view engine", "ejs");
+app.set("view engine", "ejs"); //Sets the templating engine to ejs.
 app.use(methodOverride("_method")); // Ensure methodOverride is here
 
 // Debugging methodOverride middleware
@@ -48,12 +47,14 @@ app.get("/", async (req, res) => {
   }
 });
 
+//Add Book Form (GET /add):
 app.get("/add", (req, res) => {
   res.render("addBook");
 });
 
+//Add Book Submission (POST /add):
 app.post("/add", async (req, res) => {
-  const { title, author, rating, date_read, notes, isbn } = req.body;
+  const { title, author, rating, date_read, notes, isbn } = req.body; //this is from addBook.ejs name
   let cover_url = null;
   try {
     const response = await axios.get(
