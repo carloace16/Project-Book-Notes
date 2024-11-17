@@ -1,0 +1,17 @@
+<!-- Footer content -->
+<footer>
+  <div class="container">
+    <p>
+      &copy; <span id="current-year"></span> My Book Notes. All rights reserved.
+    </p>
+    <div class="footer-links">
+      <span>Privacy Policy | Terms of Service</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Update the footer year dynamically
+  document.getElementById("current-year").textContent =
+    new Date().getFullYear();
+</script>
