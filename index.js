@@ -3,12 +3,12 @@ import bodyParser from "body-parser";
 import pg from "pg";
 import axios from "axios";
 import dotenv from "dotenv";
-import methodOverride from "method-override"; // Imports method-override, a middleware for using HTTP verbs like PUT or DELETE in environments that only support POST.
+import methodOverride from "method-override"; // Middleware for using HTTP verbs like PUT or DELETE
 
 dotenv.config(); // Reads a .env file and populates process.env with its contents.
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000; // Use PORT from environment if available
 const { Pool } = pg; // Destructure Pool from the pg module
 
 const pool = new Pool({
@@ -17,6 +17,9 @@ const pool = new Pool({
   database: process.env.DB_DATABASE,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
+  ssl: {
+    rejectUnauthorized: false, // Ensure SSL is handled correctly on Render
+  },
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -47,14 +50,14 @@ app.get("/", async (req, res) => {
   }
 });
 
-//Add Book Form (GET /add):
+// Add Book Form (GET /add):
 app.get("/add", (req, res) => {
   res.render("addBook");
 });
 
-//Add Book Submission (POST /add):
+// Add Book Submission (POST /add):
 app.post("/add", async (req, res) => {
-  const { title, author, rating, date_read, notes, isbn } = req.body; //this is from addBook.ejs name
+  const { title, author, rating, date_read, notes, isbn } = req.body; // This is from addBook.ejs name
   let cover_url = null;
   try {
     const response = await axios.get(
